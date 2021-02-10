@@ -69,7 +69,7 @@ classdef LeastSquares
         
         % hessian-vector product
         % independent of x, but keep x here for consistency
-        function hv = hvprod(self, x, v)
+        function hv = hessvecprod(self, x, v)
             if size(v,1) ~= size(self.A,2)
                 error([inputname(3), ' is of wrong dimension.']);
             end

@@ -79,7 +79,7 @@ classdef Logistic
         end
         
         % hessian-vector product
-        function hv = hvprod(self, x, v)
+        function hv = hessvecprod(self, x, v)
             if size(x,1) ~= size(self.A,2)
                 error([inputname(2), ' is of wrong dimension.']);
             end
