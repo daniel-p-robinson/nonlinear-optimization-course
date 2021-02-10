@@ -53,8 +53,6 @@ function [x,F,J,iter,status] = newton(funobj,x0,maxiter,printlevel,tol)
 % February 9, 2021:
 %    - Changed to a relative stopping condition.
 %    - Changed the first input parameter to be an object.
-%    - Added explicit handling of some warnings in the linear system caused
-%      my matrices that were (nearly) singular.
 %-------------------------------------------------------------------------
 
 % Turn off certain warnings that I will explicitely handle in the code.
@@ -146,6 +144,7 @@ while ( 1 )
   % ----------------------
   lastwarn('', '');          % Reset the lastwarn message and id.
   p = - J\F;                 % Solve the Newton linear system.
+  p = [1;2];
   [~, warnId] = lastwarn();  % Check for warning.
   
   % Set warning string appropriately
@@ -184,11 +183,11 @@ while ( 1 )
   % Check for NaNs in F and J.
   if sum(isnan(F)) >= 1 || sum(isinf(F)) >= 1
       status = -2;
-      outcome = ' ERROR (NaN when evaluating F)';
+      outcome = ' ERROR (NaN when evaluating F(x))';
       break
   elseif sum(isnan(J(:))) >= 1 || sum(isinf(J(:))) >= 1
       status = -2;
-      outcome = ' ERROR (NaN when evaluating J)';
+      outcome = ' ERROR (NaN when evaluating J(x))';
       break
   end
   

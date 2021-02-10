@@ -2,7 +2,7 @@ classdef Rosenbrock
     % This class defines the following Rosenbrock function:
     % f(x1,x2) = 100(x2 - x1^2)^2 + (1-x1)^2
     
-    % List of properties needed for the class.
+    % List of properties
     properties 
         % No properties needed for the Rosenbrock function.
     end
