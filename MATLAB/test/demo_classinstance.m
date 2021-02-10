@@ -11,7 +11,7 @@ f = ls.func(x0);
 g = ls.grad(x0);
 h = ls.hess(x0);
 v0 = 2 * x0;
-hv = ls.hvprod(x0, v0);
+hv = ls.hessvecprod(x0, v0);
 if norm(hv - h * v0, 'inf') < 1e-10
     fprintf('  hv: matched!\n')
 else
@@ -26,7 +26,7 @@ f = ls.func(x0);
 g = ls.grad(x0);
 h = ls.hess(x0);
 v0 = 2 * x0;
-hv = ls.hvprod(x0, v0);
+hv = ls.hessvecprod(x0, v0);
 if norm(hv - h * v0, 'inf') < 1e-10
     fprintf('  hv: matched!\n')
 else
@@ -45,7 +45,7 @@ f = logit.func(x0);
 g = logit.grad(x0);
 h = logit.hess(x0);
 v0 = 2 * x0;
-hv = logit.hvprod(x0, v0);
+hv = logit.hessvecprod(x0, v0);
 if norm(hv - h * v0, 'inf') < 1e-10
     fprintf('  hv: matched!\n')
 else
@@ -60,7 +60,7 @@ f = logit.func(x0);
 g = logit.grad(x0);
 h = logit.hess(x0);
 v0 = 2 * x0;
-hv = logit.hvprod(x0, v0);
+hv = logit.hessvecprod(x0, v0);
 if norm(hv - h * v0, 'inf') < 1e-10
     fprintf('  hv: matched!\n')
 else
@@ -73,3 +73,6 @@ catch E
     fprintf(1,'There was an error! The message was:\n%s\n',E.message);
 end
 
+
+funobj = Rosenbrock;
+x0 = [10;20]; maxiter = 30; printlevel = 1; tol=1e-10;

@@ -29,7 +29,7 @@ classdef LeastSquares
                 if isa(varargin{1}, 'char')
                     dataPath = [varargin{1}, varargin{2},'.mat'];
                     if ~(exist(dataPath, 'file') == 2)
-                    error(['Logistic(ERROR): either dataset is not in ', dataPath, ...
+                    error(['LeastSquares(ERROR): either dataset is not in ', dataPath, ...
                         ' or the dataset cannot be used for logistic loss.'])
                     end
                     load(dataPath, 'A', 'b');
