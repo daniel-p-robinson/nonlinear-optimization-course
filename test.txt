@@ -1,2 +1,3 @@
 test files
-my conflict
+another line
+
