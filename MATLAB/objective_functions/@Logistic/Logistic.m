@@ -46,6 +46,10 @@ classdef Logistic
                 error([inputname(2), ' is of wrong dimension.']);
             end
             expterm = exp(-1 * (self.b).*(self.A * x));
+            % safeguard
+            if sum(isinf(expterm)) ~=0
+                warning('Logistic.func: expterm has Inf value')
+            end
             f=1/self.m * sum(log(1 + expterm));
         end
         
