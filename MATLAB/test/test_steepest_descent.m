@@ -6,8 +6,8 @@
 % ------------------------------------------------------------------------
 
 % Add path to the functions and Newton algorithm.
-addpath('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/objective_functions/')
-addpath('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/algorithms/steepest_descent/')
+addpath('../objective_functions/')
+addpath('../algorithms/steepest_descent/')
 
 % Save a dashed line for printing.
 dashedline = repelem('-',1,87) ;
@@ -56,7 +56,7 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Gather the object Least-Squares.
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Least-Squares...')
-funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/bodyfat.mat');
+funobj = LeastSquares('../datasets/leastsquares/bodyfat.mat');
 
 % Define function handles for computing F and its Jacobian J.
 f_hand = @funobj.func;
@@ -74,7 +74,7 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Gather the object Least-Squares.
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Least-Squares...')
-funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/abalone.mat');
+funobj = LeastSquares('../datasets/leastsquares/abalone.mat');
 
 % Define function handles for computing F and its Jacobian J.
 f_hand = @funobj.func;
@@ -92,7 +92,7 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Gather the object Least-Squares.
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Least-Squares...')
-funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/bodyfatExpand3.mat');
+funobj = LeastSquares('../datasets/leastsquares/bodyfatExpand3.mat');
 
 % Define function handles for computing F and its Jacobian J.
 f_hand = @funobj.func;
@@ -113,7 +113,7 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Gather the object Logistic
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Logistic........')
-funobj = Logistic('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/logistic/diabetes.mat');
+funobj = Logistic('../datasets/logistic/diabetes.mat');
 
 % Define function handles for computing F and its Jacobian J.
 f_hand = @funobj.func;
@@ -131,7 +131,7 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Gather the object Logistic
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Logistic........')
-funobj = Logistic('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/logistic/leu.mat');
+funobj = Logistic('../datasets/logistic/leu.mat');
 
 % Define function handles for computing F and its Jacobian J.
 f_hand = @funobj.func;
@@ -149,7 +149,7 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Gather the object Logistic
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Logistic........')
-funobj = Logistic('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/logistic/phishing.mat');
+funobj = Logistic('../datasets/logistic/phishing.mat');
 
 % Define function handles for computing F and its Jacobian J.
 f_hand = @funobj.func;
