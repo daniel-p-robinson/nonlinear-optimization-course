@@ -1,4 +1,5 @@
 # nonlinear-optimization-course
+- This repository is currently being used to host material for a Nonlinear Optimization Course. 
 
 # To Do
 - Update the HessVec product method in problem class LeastSquaresTukey.
