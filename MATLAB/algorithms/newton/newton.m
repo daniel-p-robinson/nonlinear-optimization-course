@@ -26,6 +26,7 @@ function [x,info] = newton(Ffunc,Jfunc,x0,params)
 %                                 Norm-step  2-norm of Newton step
 %                 tol        : desired stoppping tolerance.
 %                 outputfile : name of a file for output to be printed.
+%                 probname   : problem name used for printing purposes.
 %
 %  Output arguments:
 %  -----------------
@@ -82,6 +83,7 @@ if nargin == 3
     params.printlevel = 1;
     params.tol        = 1e-8;
     params.outfileID  = 1;
+    params.probname   = ''; 
 end
 
 % Check that the initial point makes sense.
@@ -151,6 +153,18 @@ else
 end
 outfileNAME = fopen(outfileID);
 
+if isfield(params,'probname')
+    probname = params.probname;
+    if ~ischar(probname)
+        str = 'probname';
+        fprintf('\n newton(ERROR):Invalid control parameter %s.\n',str);
+        info.status = -1;
+        return
+    end
+else
+    probname = ''; 
+end
+
 % Check that inputs Ffunc and Jfunc are both function handles.
 if ~isa(Ffunc,'function_handle')
     str = 'Ffunc';
@@ -190,6 +204,7 @@ if printlevel ~= 0
   fprintf(outfileID,' print level           : %g\n',printlevel);
   fprintf(outfileID,' termination tolerance : %1.2e\n',tol);
   fprintf(outfileID,' file for output       : %s\n',outfileNAME);
+  fprintf(outfileID,' problem name          : %s\n',probname);
   fprintf(outfileID,'%s\n',dashedline);
   fprintf(outfileID,'%s\n',header);
   fprintf(outfileID,' %5g %14.7e %14.7e', iter, normF, normx );
@@ -213,7 +228,7 @@ while ( 1 )
   % ----------------------
   lastwarn('', '');          % Reset the lastwarn message and id.
   p = - J\F;                 % Solve the Newton linear system.
-  [blah, warnId] = lastwarn();  % Check for warning.
+  [~, warnId] = lastwarn();  % Check for warning.
   
   % Set warning string appropriately
   if( isempty(warnId) )

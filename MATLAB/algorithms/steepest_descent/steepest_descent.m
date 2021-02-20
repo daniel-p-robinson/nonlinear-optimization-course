@@ -27,6 +27,7 @@ function [x,info] = steepest_descent(f_hand,g_hand,x0,params)
 %                                 Norm-step  2-norm of Newton step
 %                 tol        : desired stoppping tolerance.
 %                 outputfile : name of a file for output to be printed.
+%                 probname   : problem name used for printing purposes.
 %                 stepchoice : string indicating how choice of stepsize:
 %                              fixed       fixed step size is used.
 %                              adaptive    adaptive step size is used.
@@ -87,6 +88,7 @@ if nargin == 3
     params.printlevel = 1;
     params.tol        = 1e-6;
     params.outfileID  = 1;
+    params.probname   = '';
     params.stepchoice = 'fixed';
     params.stepsize   = 1;
 end
@@ -157,6 +159,18 @@ else
     outfileID = 1; % standard output (the screen)
 end
 outfileNAME = fopen(outfileID);
+
+if isfield(params,'probname')
+    probname = params.probname;
+    if ~ischar(probname)
+        str = 'probname';
+        fprintf('\n steepest_descen(ERROR):Invalid control parameter %s.\n',str);
+        info.status = -1;
+        return
+    end
+else
+    probname = ''; 
+end
 
 if isfield(params,'stepchoice')
     stepchoice = params.stepchoice;
@@ -229,6 +243,7 @@ if printlevel ~= 0
   fprintf(outfileID,' print level           : %g\n',printlevel);
   fprintf(outfileID,' termination tolerance : %1.2e\n',tol);
   fprintf(outfileID,' file for output       : %s\n',outfileNAME);
+  fprintf(outfileID,' problem name          : %s\n',probname);
   fprintf(outfileID,' step size choice      : %s\n',stepchoice);
   if strcmp(stepchoice,'fixed')
       fprintf(outfileID,' step size used        : %1.2e\n',stepsize);
