@@ -60,6 +60,7 @@ function [x,info] = newton(Ffunc,Jfunc,x0,params)
 % Turn off certain warnings that I will explicitely handle in the code.
 warning('off','MATLAB:illConditionedMatrix');
 warning('off','MATLAB:singularMatrix');
+warning('off','MATLAB:nearlySingularMatrix');
 
 % Set dummy values for outputs; prevents errors resulting from bad inputs.  
 x      = [];
@@ -212,7 +213,7 @@ while ( 1 )
   % ----------------------
   lastwarn('', '');          % Reset the lastwarn message and id.
   p = - J\F;                 % Solve the Newton linear system.
-  [~, warnId] = lastwarn();  % Check for warning.
+  [blah, warnId] = lastwarn();  % Check for warning.
   
   % Set warning string appropriately
   if( isempty(warnId) )
@@ -221,6 +222,8 @@ while ( 1 )
       warnstring = '  sing ';
   elseif strcmp(warnId,'MATLAB:illConditionedMatrix')
       warnstring = 'ill-cond';
+  elseif strcmp(warnId,'MATLAB:nearlySingularMatrix')
+      warnstring = 'nearsing';
   else
       status = -9;
       outcome = ' ERROR (unknown NEW warning encountered)';

@@ -49,6 +49,9 @@ fprintf('exited with status = %2g\n',info.status);
 % Test 2: Least-Squares
 % ------------------------------------------
 
+% bodyfat data set
+%------------------
+
 % Gather the object Least-Squares.
 fprintf(' Testing algorithm NEWTON on function Least-Squares...')
 funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/bodyfat.mat');
@@ -58,7 +61,43 @@ Ffunc = @funobj.grad;
 Jfunc = @funobj.hess;
 
 % Initial estimate of a zero of F.
-x0 = ones(size(funobj.A,2), 1);
+x0 = zeros(size(funobj.A,2), 1);
+
+% Call Newton Method solver.
+[~,info] = newton(Ffunc,Jfunc,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% abalone data set
+%------------------
+
+% Gather the object Least-Squares.
+fprintf(' Testing algorithm NEWTON on function Least-Squares...')
+funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/abalone.mat');
+
+% Define function handles for computing F and its Jacobian J.
+Ffunc = @funobj.grad;
+Jfunc = @funobj.hess;
+
+% Initial estimate of a zero of F.
+x0 = zeros(size(funobj.A,2), 1);
+
+% Call Newton Method solver.
+[~,info] = newton(Ffunc,Jfunc,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% bodyfatExpand3 data set
+%------------------------
+
+% Gather the object Least-Squares.
+fprintf(' Testing algorithm NEWTON on function Least-Squares...')
+funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/bodyfatExpand3.mat');
+
+% Define function handles for computing F and its Jacobian J.
+Ffunc = @funobj.grad;
+Jfunc = @funobj.hess;
+
+% Initial estimate of a zero of F.
+x0 = zeros(size(funobj.A,2), 1);
 
 % Call Newton Method solver.
 [~,info] = newton(Ffunc,Jfunc,x0,params);
@@ -66,6 +105,9 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Test 3: Logistic Regression
 % ------------------------------------------
+
+% Diabetes data set
+%------------------
 
 % Gather the object Logistic
 fprintf(' Testing algorithm NEWTON on function Logistic........')
@@ -76,7 +118,43 @@ Ffunc = @funobj.grad;
 Jfunc = @funobj.hess;
 
 % Initial estimate of a zero of F.
-x0 = ones(size(funobj.A,2), 1);
+x0 = zeros(size(funobj.A,2), 1);
+
+% Call Newton Method solver.
+[~,info] = newton(Ffunc,Jfunc,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% Leu data set
+%------------------
+
+% Gather the object Logistic
+fprintf(' Testing algorithm NEWTON on function Logistic........')
+funobj = Logistic('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/logistic/leu.mat');
+
+% Define function handles for computing F and its Jacobian J.
+Ffunc = @funobj.grad;
+Jfunc = @funobj.hess;
+
+% Initial estimate of a zero of F.
+x0 = zeros(size(funobj.A,2), 1);
+
+% Call Newton Method solver.
+[~,info] = newton(Ffunc,Jfunc,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% Phishing data set
+%------------------
+
+% Gather the object Logistic
+fprintf(' Testing algorithm NEWTON on function Logistic........')
+funobj = Logistic('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/logistic/phishing.mat');
+
+% Define function handles for computing F and its Jacobian J.
+Ffunc = @funobj.grad;
+Jfunc = @funobj.hess;
+
+% Initial estimate of a zero of F.
+x0 = zeros(size(funobj.A,2), 1);
 
 % Call Newton Method solver.
 [~,info] = newton(Ffunc,Jfunc,x0,params);

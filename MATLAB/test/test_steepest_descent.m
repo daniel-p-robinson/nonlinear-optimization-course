@@ -51,6 +51,9 @@ fprintf('exited with status = %2g\n',info.status);
 % Test 2: Least-Squares
 % ------------------------------------------
 
+% bodyfat data set
+% -----------------
+
 % Gather the object Least-Squares.
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Least-Squares...')
 funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/bodyfat.mat');
@@ -60,7 +63,43 @@ f_hand = @funobj.func;
 g_hand = @funobj.grad;
 
 % Initial estimate of a minmizer of f.
-x0 = ones(size(funobj.A,2), 1);
+x0 = zeros(size(funobj.A,2), 1);
+
+% Call steepest descent solver.
+[~,info] = steepest_descent(f_hand,g_hand,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% abalone data set
+% -----------------
+
+% Gather the object Least-Squares.
+fprintf(' Testing algorithm STEEPEST_DESCENT on function Least-Squares...')
+funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/abalone.mat');
+
+% Define function handles for computing F and its Jacobian J.
+f_hand = @funobj.func;
+g_hand = @funobj.grad;
+
+% Initial estimate of a minmizer of f.
+x0 = zeros(size(funobj.A,2), 1);
+
+% Call steepest descent solver.
+[~,info] = steepest_descent(f_hand,g_hand,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% bodyfatExpand3 data set
+% ------------------------
+
+% Gather the object Least-Squares.
+fprintf(' Testing algorithm STEEPEST_DESCENT on function Least-Squares...')
+funobj = LeastSquares('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/leastsquares/bodyfatExpand3.mat');
+
+% Define function handles for computing F and its Jacobian J.
+f_hand = @funobj.func;
+g_hand = @funobj.grad;
+
+% Initial estimate of a minmizer of f.
+x0 = zeros(size(funobj.A,2), 1);
 
 % Call steepest descent solver.
 [~,info] = steepest_descent(f_hand,g_hand,x0,params);
@@ -68,6 +107,9 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Test 3: Logistic Regression
 % ------------------------------------------
+
+% diabetes data set
+%-------------------
 
 % Gather the object Logistic
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Logistic........')
@@ -79,6 +121,42 @@ g_hand = @funobj.grad;
 
 % Initial estimate of a minimize of f.
 x0 = ones(size(funobj.A,2), 1);
+
+% Call steepest descent solver.
+[~,info] = steepest_descent(f_hand,g_hand,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% leu data set
+%-------------------
+
+% Gather the object Logistic
+fprintf(' Testing algorithm STEEPEST_DESCENT on function Logistic........')
+funobj = Logistic('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/logistic/leu.mat');
+
+% Define function handles for computing F and its Jacobian J.
+f_hand = @funobj.func;
+g_hand = @funobj.grad;
+
+% Initial estimate of a minimize of f.
+x0 = zeros(size(funobj.A,2), 1);
+
+% Call steepest descent solver.
+[~,info] = steepest_descent(f_hand,g_hand,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% phishing data set
+%-------------------
+
+% Gather the object Logistic
+fprintf(' Testing algorithm STEEPEST_DESCENT on function Logistic........')
+funobj = Logistic('/Users/danielrobinson/daniel/git/nonlinear-optimization-course/MATLAB/datasets/logistic/phishing.mat');
+
+% Define function handles for computing F and its Jacobian J.
+f_hand = @funobj.func;
+g_hand = @funobj.grad;
+
+% Initial estimate of a minimize of f.
+x0 = zeros(size(funobj.A,2), 1);
 
 % Call steepest descent solver.
 [~,info] = steepest_descent(f_hand,g_hand,x0,params);
