@@ -9,7 +9,7 @@ addpath('../objective_functions/')
 addpath('../algorithms/steepest_descent/')
 
 % Save a dashed line for printing.
-dashedline = repelem('-',1,87);
+dashedline = repelem('-',1,93);
 
 % ------------------------------------------
 % Begin testing various objective functions.
@@ -66,6 +66,34 @@ x0 = ones(5,1);
 
 % Name of function.
 params.probname = 'Genhumps';
+
+% Call steepest descent solver.
+[~,info] = steepest_descent(f_hand,g_hand,x0,params);
+fprintf('exited with status = %2g\n',info.status);
+
+% ------------------------------------------
+% Test: Quadratic function
+% ------------------------------------------
+
+% Gather the object Quadratic.
+fprintf(' Testing algorithm STEEPEST_DESCENT on function Quadratic.............')
+props.n       = 100;
+props.density = 0.2;
+props.rc      = 1e-2;
+props.kind    = 1;
+props.g_mean  = 1;
+props.g_sd    = 1;
+funobj        = Quadratic(props);
+
+% Define function handles for computing F and its Jacobian J.
+f_hand = @funobj.func;
+g_hand = @funobj.grad;
+
+% Initial estimate of a zero of F.
+x0 = ones(funobj.n,1);
+
+% Name of function.
+params.probname = 'Quadratic (100,0.2,1e-3,1,1,1)';
 
 % Call steepest descent solver.
 [~,info] = steepest_descent(f_hand,g_hand,x0,params);
