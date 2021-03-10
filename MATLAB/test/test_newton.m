@@ -79,8 +79,8 @@ props.n       = 100;
 props.density = 0.2;
 props.rc      = 1e-2;
 props.kind    = 1;
-props.g_mean  = 1;
-props.g_sd    = 1;
+props.c_mean  = 1;
+props.c_sd    = 1;
 funobj        = Quadratic(props);
 
 % Define function handles for computing F and its Jacobian J.
