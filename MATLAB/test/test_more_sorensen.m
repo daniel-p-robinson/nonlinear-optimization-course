@@ -38,11 +38,11 @@ for instance = 1:num_instances
     props.kind    = 1;
     props.c_mean  = 1;
     props.c_sd    = 1;
-    funobj        = Quadratic(props); %f(x) = g'x + 0.5x'Hx
+    funobj        = Quadratic(props); %f(x) = c'x + 0.5x'Ax
     
-    % Get g and H
-    g = funobj.grad(zeros(props.n,1));
-    H = funobj.hess(zeros(props.n,1));
+    % Get c and A
+    c = funobj.grad(zeros(props.n,1));
+    A = funobj.hess(zeros(props.n,1));
     
     % Use More-Sorensen to solve trust region subproblem with radius 1.
     params.tol        = 1e-8;
@@ -50,7 +50,7 @@ for instance = 1:num_instances
     params.printlevel = 1;
     params.outfileID  = outfileID;
     params.probname   = sprintf('QP-random(%g)',instance);
-    [~,info]          = more_sorensen(H,g,10^(ceil(num_instances/2)-instance),params);
+    [~,info]          = more_sorensen(A,c,10^(ceil(num_instances/2)-instance),params);
     
     % Print the outcome.
     fprintf('exited with status = %2g\n',info.status);
