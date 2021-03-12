@@ -56,3 +56,11 @@ for instance = 1:num_instances
     fprintf('exited with status = %2g\n',info.status);
     
 end
+
+% ------------
+% Finish up.
+% ------------
+fprintf('%s\n',dashedline)
+fprintf(' End: Testing of More-Sorensen solver\n')
+fprintf('%s\n',dashedline)
+fclose('all');
