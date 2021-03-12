@@ -1,17 +1,17 @@
-function [x,info] = cg(Av_hand,b,x,params)
+function [x,info] = linear_cg(Av_hand,b,x,params)
 % ========================================================================
 % This function implements the linear conjugate-gradient algorithm, which
 % is an iterative algorithm for approximately solving a linear system of
-% the form Ax = b where the matrix A is mxn, symmetric, and positive
+% the form Ax = b where the matrix A is nxn, symmetric, and positive
 % definite. A valid call for using this function is of the form
-%      function [x,status,k,r,r_norm] = cg(Av_hand,b,x,e)
+%      [x,info] = linear_cg(Av_hand,b,x,params)
 % where Av_hand is a handle that computes the product of the matrix A with
-% a desired input vector v, b is a vector of length m, x is an initial
-% guess of the unique solution of the linear system Ax = b, and e is a
-% solution tolerance vector of length m.
+% a desired input vector v, b is a vector of length n, x is an initial
+% guess of the unique solution of the linear system Ax = b, and params is a
+% structure that may contain input parameters (see below).
 % ========================================================================
 % Author      : Frank E. Curtis and Daniel P. Robinson
-% Description : Conjugate Gradient Method
+% Description : Linear conjugate gradient method
 % Input       : Av_hand ~ handle of a function that computes A*v for a 
 %                         desired vector v.  The function, say Av_prod,
 %                         associated to the handle should be of the form
@@ -19,13 +19,13 @@ function [x,info] = cg(Av_hand,b,x,params)
 %                         where the output Av = A*v for the given input v.
 %               b       ~ right-hand side vector
 %               x       ~ initial iterate
-%               params  ~ structure with the followign members:
-%                         e           solution tolerance
+%               params  ~ structure with the following members:
+%                         tol         solution tolerance
 %                         maxiter     maximum allowed number of iterations
 %                         printlevel  integer indicating print details
 %                                     0  no printing will be performed
 %                                     1  single line output per iteration
-%                         outfileNAME name of a file for priting output.
+%                         outfileNAME name of a file for printing output.
 %                         probname    string holding the problem name.
 % Output      : x    ~ final iterate
 %             : info ~ structure whose members include the following:
@@ -81,16 +81,16 @@ end
 
 str2 = 'params';
 
-if isfield(params,'e')
-    e = params.e;
-    if any(e < 0)
-        str1 = 'e';
+if isfield(params,'tol')
+    tol = params.tol;
+    if any(tol < 0)
+        str1 = 'tol';
         fprintf('\n cg(ERROR):Invalid field %s in input %s.\n',str1,str2);
         info.status = -1;
         return
     end
 else
-    e = 10e-6*ones(m,1);
+    tol = 1e-6;
 end
 
 if isfield(params,'maxiter')
@@ -185,7 +185,7 @@ while (1)
   end
   
   % Check for termination
-  if norms.r <= max(norms.r0,1)*e
+  if norms.r <= max(norms.r0,1)*tol
       outcome = 'Termination tolerance met.';
       status = 0;
       break

@@ -1,6 +1,6 @@
 % ------------------------------------------------------------------------
 % Author: Daniel P. Robinson
-% Purpose: Test the Conjugqter Gradient solver on various linear systems.
+% Purpose: Test the Conjugate Gradient solver on various linear systems.
 % Creation: First created on March 10, 2021.
 % ------------------------------------------------------------------------
 
@@ -50,12 +50,12 @@ for instance = 1:num_instances
     % Use CG to solve, i.e., to solve Ax = -c.
     b                 = -c;
     x                 = zeros(props.n,1);
-    params.e          = 1e-6*ones(length(b),1);
+    params.e          = 1e-6;
     params.maxiter    = props.n;
     params.printlevel = 1;
     params.outfileID  = outfileID;
     params.probname   = sprintf('Random QP(%g)',instance);
-    [~,info]          = cg(hvfunc_onlyv,b,x,params);
+    [~,info]          = linear_cg(hvfunc_onlyv,b,x,params);
     
     % Print the outcome.
     fprintf('exited with status = %2g\n',info.status);
@@ -96,12 +96,12 @@ for instance = 1:num_instances
 
     % Use CG to solve Ax = b
     x                 = zeros(n,1);
-    params.e          = 1e-6*ones(length(b),1);
+    params.tol        = 1e-6;
     params.maxiter    = n;
     params.printlevel = 1;
     params.outfileID  = outfileID;
     params.probname   = sprintf('Random QP with clustered eigs(%g)',instance);
-    [~,info]          = cg(Av_hand,b,x,params);
+    [~,info]          = linear_cg(Av_hand,b,x,params);
     
     % Print the outcome.
     fprintf('exited with status = %2g....in....%2g iterations\n',info.status,info.k);
