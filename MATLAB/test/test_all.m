@@ -14,6 +14,7 @@ end
 % ---------------------------------------------------------------------
 test_newton;
 test_steepest_descent;
+test_cg;
 
 % Copy all .out files to a single file called test_all.out.
 % ----------------------------------------------------------------------

@@ -1,4 +1,4 @@
-classdef LeastSquaresTukey
+classdef LeastSquaresTukey < handle
 %=========================================================================
 % This class defines the robust linear regression objective function using 
 % Tukey's bisquare loss function. The objective function is given by
@@ -17,11 +17,20 @@ classdef LeastSquaresTukey
 %    Using Tukey's Biweight Criterion,", Technometrics, 60, 36-47.
 % ========================================================================
     properties
-        A % data matrix
-        b % target vector
-        m % number of samples
-        n % number of features
-        d % constant value
+        A          % data matrix
+        b          % target vector
+        m          % number of samples
+        n          % number of features
+        d          % constant value
+        x          % saved vector x
+        res        % residual at x: res = Ax-b
+        f_computed % 0/1 indicates whether f(x) has been computed
+        f          % holds f(x) when f_computed is true
+        g_computed % 0/1 indicates whether grad f(x) has been computed
+        g          % holds grad f(x) when g_computed is true
+        h_computed % 0/1 indicates whether hess f(x) has been computed
+        h          % holds hess f(x) when h_computed is true
+        name       % name of the objective function
     end
     
     methods
@@ -45,94 +54,116 @@ classdef LeastSquaresTukey
                 self.A = varargin{1};
                 self.b = varargin{2};
             end
-            self.m = size(self.A,1);
-            self.n = size(self.A,2);
-            self.d = 4.685;  % assign value from literature to d
+            [self.m,self.n] = size(self.A);
+            if self.m <= 0 || self.n <= 0
+               error('LeastSquaresTukey(ERROR): invalid dimensions for A.')
+            end
+            if length(b) ~= self.m
+               error('LeastSquaresTukey(ERROR): invalid dimensions in (A,b).')
+            end
+            self.d   = 4.685; % value from the literature
+            self.x   = zeros(self.n,1);
+            self.res = -self.b;
+            self.f_computed = false;   self.f = [];
+            self.g_computed = false;   self.g = [];
+            self.h_computed = false;   self.h = [];
+            self.name       = 'nonlinear-least-squares-tukey';
         end
         
         % function evaluation
         function f=func(self, x)
-            if size(x,1) ~= size(self.A,2)
-                error([inputname(2), ' is of wrong dimension.']);
+            if length(x) ~= self.n
+                error('Input has the wrong dimension.');
             end
-            u = (self.A*x - self.b); % input values for Tukey bisquare loss function
-            f=0; 
-            for i = 1:self.m
-                if abs(u(i))<=self.d %first possibility of piecewise Tukey bisquare loss function
-                    f=f+(((self.d).^2)/6)*(1-(1-(u(i)/self.d)^2)^3);
+            if isequal( x, self.x )
+                if self.f_computed
+                    f = self.f;
                 else
-                    f=f+((self.d)^2)/6; % a constant value
-                end    
+                    f = sum((self.d^2/6)*min(1-(1-(self.res/self.d).^2).^3, 1));
+                    self.f = f;
+                    self.f_computed = true;
+                end
+            else
+                self.x = x;
+                self.res = (self.A*self.x - self.b); 
+                f = sum((self.d^2/6)*min(1-(1-(self.res/self.d).^2).^3, 1));
+                self.f = f;
+                self.f_computed = true;
+                self.g_computed = false;
+                self.h_computed = false;
             end
         end
         
         % gradient evaluation
         function g = grad(self, x)
-            if size(x,1) ~= size(self.A,2)
-                error([inputname(2), ' is of wrong dimension.']);
+            if length(x) ~= self.n
+                error('Input has the wrong dimension.');
             end
-            u = (self.A*x - self.b); % input into derivative of Tukey bisquare loss function
-            s=zeros([self.m 1]);     % initializes array to hold differentiation information
-            for i = 1:self.m 
-                if abs(u(i))<=self.d
-                    s(i)=u(i)*((1-(u(i)/self.d)^2)^2); % first possibility of piecewise Tukey bisquare loss function
+            if isequal( x, self.x )
+                if self.g_computed
+                    g = self.g;
                 else
-                    s(i)=0; % zero from differentiating a constant
-                end    
+                    g = self.A' * (self.res.*(1-(self.res/self.d).^2).^2.*(abs(self.res) <= self.d));  % chain rule gives answer
+                    self.g = g;
+                    self.g_computed = true;
+                end
+            else
+                self.x   = x;
+                self.res = (self.A*self.x - self.b);
+                g = self.A' * (self.res.*(1-(self.res/self.d).^2).^2.*(abs(self.res) <= self.d));  % chain rule gives answer
+                self.g = g;
+                self.g_computed = true;
+                self.f_computed = false;
+                self.h_computed = false;
             end
-            g= self.A' * s;  % chain rule gives answer
         end
         
         % hessian evaluation is independent of x; keep x for consistency
         function h = hess(self, x)
-            u  = (self.A*x - self.b); % input into second derivative of Tukey bisquare loss function
-            sd = zeros(self.m,1);     % hold initializes array to hold differentiation information
-            for i = 1:self.m
-                if abs(u(i))<=self.d 
-                    f = ( u(i)/self.d )^2;
-                    sd(i)=(1-f)*(1-5*f);
-                else
-                    sd(i)=0; 
-                end    
+            if length(x) ~= self.n
+                error('Input must be a %g dimensional vector!',self.n);
             end
-            h = (self.A)'*diag(sd)*(self.A);
+            if isequal( x, self.x )
+                if self.h_computed
+                    h = self.h;
+                else
+                    sd = (1-(self.res/self.d).^2).*(1-5*(self.res/self.d).^2).*(abs(self.res) <= self.d);
+                    h  = (self.A)'*spdiags(sd,0,self.m,self.m)*(self.A);
+                    self.h = h;
+                    self.h_computed = true;
+                end
+            else
+                self.x = x;
+                self.res = (self.A*self.xx - self.b); 
+                sd = (1-(self.res/self.d).^2).*(1-5*(self.res/self.d).^2).*(abs(self.res) <= self.d);
+                h = (self.A)'*spdiags(sd,0,self.m,self.m)*(self.A);
+                self.h = h;
+                self.h_computed = true;
+                self.f_computed = false;
+                self.g_computed = false;
+            end
         end
         
         % hessian-vector product is independent of x; keep x for consistency
         function hv = hessvecprod(self, x, v)
-            if size(x,1) ~= size(self.A,2)
-                error([inputname(2), ' is of wrong dimension.']);
+            if length(x) ~= self.n
+                error('First input has the wrong dimension.');
             end
-            if size(v,1) ~= size(self.A,2)
-                error([inputname(3), ' is of wrong dimension.']);
+            if length(v) ~= self.n
+                error('Second input has the wrong dimension.');
             end
-            
-            %this part recalculates the hessian matrix determined above so
-            %that multiplication may be done below
-            h=zeros(self.n);
-            AT=self.A';
-            
-            u = (self.A*x - self.b);
-            sd=zeros([self.m 1]);
-            for i = 1:self.m
-                if abs(u(i))<=self.d
-                    sd(i)=(1/((self.d).^4))*((u(i)).^2-(self.d).^2)*(5*(u(i)).^2-(self.d).^2);
-                else
-                    sd(i)=0;
-                end    
+            if isequal( x, self.x )
+                sd = (1-(self.res/self.d).^2).*(1-5*(self.res/self.d).^2).*(abs(self.res) <= self.d);
+                hv = (self.A)'*spdiags(sd,0,self.m,self.m)*(self.A)*v;
+            else
+               self.x   = x;
+               self.res = (self.A*self.x - self.b);
+               sd = (1-(self.res/self.d).^2).*(1-5*(self.res/self.d).^2).*(abs(self.res) <= self.d);
+               hv = (self.A)'*spdiags(sd,0,self.m,self.m)*(self.A)*v;
+               self.h_computed = false;
+               self.f_computed = false;
+               self.g_computed = false;
             end
-            
-            for k=1:self.n
-                for j=1:self.n
-                    for i=1:self.m
-                        h(k,j)=h(k,j)+AT(k,i)*AT(j,i)*sd(i);
-                    end
-                end
-            end
-            
-            %multiplies the recalculated hessian matrix by the vector
-            hv = h * v;
         end
-        
     end
 end
