@@ -135,7 +135,7 @@ classdef LeastSquaresTukey < handle
                 end
             else
                 self.x = x;
-                self.res = (self.A*self.xx - self.b); 
+                self.res = (self.A*self.x - self.b); 
                 sd = (1-(self.res/self.d).^2).*(1-5*(self.res/self.d).^2).*(abs(self.res) <= self.d);
                 h = (self.A)'*spdiags(sd,0,self.m,self.m)*(self.A);
                 h  = 0.5*(h+h');
