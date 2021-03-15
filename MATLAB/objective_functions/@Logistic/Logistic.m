@@ -124,6 +124,7 @@ classdef Logistic < handle
                 else
                     D = diag((1-self.sigmoid) .* self.sigmoid);
                     h = (1/self.m) * self.A' * D * self.A;
+                    h = 0.5*(h+h');
                     self.h = h;
                     self.h_computed = true;
                 end
@@ -133,6 +134,7 @@ classdef Logistic < handle
                 self.sigmoid = self.expterm./(1+self.expterm);
                 D = diag((1-self.sigmoid) .* self.sigmoid);
                 h = (1/self.m) * self.A' * D * self.A;
+                h = 0.5*(h+h');
                 self.h = h;
                 self.h_computed = true;
                 self.f_computed = false;

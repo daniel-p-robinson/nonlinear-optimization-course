@@ -113,15 +113,17 @@ classdef Rosenbrock < handle
                 if self.h_computed
                     h = self.h;
                 else
-                    h = [-400*(x2-3*x1^2)+2 , -400*x1 ;
-                         -400*x1            ,   200   ];
+                    h12 = -400*x1;
+                    h = [-400*(x2-3*x1^2)+2 , h12 ;
+                         h12                , 200   ];
                     self.h = h;
                     self.h_computed = true;
                 end
             else
                 self.x = x;
-                h = [-400*(x2-3*x1^2)+2 , -400*x1 ;
-                     -400*x1            ,   200   ];
+                h12 = -400*x1;
+                h = [-400*(x2-3*x1^2)+2 , h12 ;
+                     h12                , 200   ];
                 self.h = h;
                 self.h_computed = true;
                 self.f_computed = false;
@@ -143,15 +145,17 @@ classdef Rosenbrock < handle
                 if self.h_computed
                     hv = self.h*v;
                 else
-                    self.h = [-400*(x2-3*x1^2)+2 , -400*x1 ;
-                              -400*x1            ,   200   ]; 
+                    h12 = -400*x1;
+                    self.h = [-400*(x2-3*x1^2)+2 , h12 ;
+                              h12                , 200   ]; 
                     self.h_computed = true;
                     hv = self.h*v;
                 end
             else
                 self.x = x;
-                self.h = [-400*(x2-3*x1^2)+2 , -400*x1 ;
-                          -400*x1            ,   200   ]; 
+                h12 = -400*x1;
+                self.h = [-400*(x2-3*x1^2)+2 , h12 ;
+                          h12                , 200   ]; 
                 self.h_computed = true;
                 self.f_computed = false;
                 self.g_computed = false;
