@@ -130,7 +130,7 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Gather the object Least-Squares-Tukey.
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Least-Squares-Tukey...')
-funobj = LeastSquares('../datasets/leastsquares/abalone.mat');
+funobj = LeastSquaresTukey('../datasets/leastsquares/abalone.mat');
 
 % Define function handles for computing F and its Jacobian J.
 f_hand = @funobj.func;
@@ -151,7 +151,7 @@ fprintf('exited with status = %2g\n',info.status);
 
 % Gather the object Least-Squares-Tukey.
 fprintf(' Testing algorithm STEEPEST_DESCENT on function Least-Squares-Tukey...')
-funobj = LeastSquares('../datasets/leastsquares/bodyfatExpand3.mat');
+funobj = LeastSquaresTukey('../datasets/leastsquares/bodyfatExpand3.mat');
 
 % Define function handles for computing F and its Jacobian J.
 f_hand = @funobj.func;
